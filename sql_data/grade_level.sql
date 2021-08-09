@@ -1,0 +1,10 @@
+insert into grade_level (grade_level) values (9);
+insert into grade_level (grade_level) values (7);
+insert into grade_level (grade_level) values (8);
+insert into grade_level (grade_level) values (9);
+insert into grade_level (grade_level) values (9);
+insert into grade_level (grade_level) values (7);
+insert into grade_level (grade_level) values (8);
+insert into grade_level (grade_level) values (10);
+insert into grade_level (grade_level) values (9);
+insert into grade_level (grade_level) values (10);

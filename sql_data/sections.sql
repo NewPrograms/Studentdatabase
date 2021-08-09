@@ -1,0 +1,12 @@
+insert into sections (section) values ('Uranium');
+insert into sections (section) values ('Aether');
+insert into sections (section) values ('Lead');
+insert into sections (section) values ('Infinity');
+insert into sections (section) values ('Faith');
+insert into sections (section) values ('Integrity');
+insert into sections (section) values ('Ragnarok');
+insert into sections (section) values ('Loki');
+insert into sections (section) values ('Love');
+insert into sections (section) values ('Aether');
+insert into sections (section) values ('Loki');
+insert into sections (section) values ('Tony');

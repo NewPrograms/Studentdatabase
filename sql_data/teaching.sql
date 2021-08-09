@@ -1,0 +1,10 @@
+insert into teaching (subject_teaching) values ('AP');
+insert into teaching (subject_teaching) values ('AP');
+insert into teaching (subject_teaching) values ('ARTS');
+insert into teaching (subject_teaching) values ('PE');
+insert into teaching (subject_teaching) values ('MUSIC');
+insert into teaching (subject_teaching) values ('ARTS');
+insert into teaching (subject_teaching) values ('SCIENCE FILIPINO');
+insert into teaching (subject_teaching) values ('ENGLISH');
+insert into teaching (subject_teaching) values ('HEALTH');
+insert into teaching (subject_teaching) values ('ARTS');

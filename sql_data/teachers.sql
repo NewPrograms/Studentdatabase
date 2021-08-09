@@ -1,0 +1,15 @@
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0001', 'Eddy', 'Gibard', 'Wintour', 28, 'Polygender', '29 Ludington Terrace', 'ENGLISH');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0002', 'Tonia', 'Dineen', 'Longmaid', 44, 'Agender', '65405 Westend Street', 'MUSIC');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0003', 'Bonnee', 'Barron', 'Thowes', 41, 'Bigender', '7 Twin Pines Court', 'ARTS');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0004', 'Odella', 'Shatford', 'O'' Culligan', 44, 'Genderfluid', '9511 Fisk Pass', 'AP');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0005', 'Dina', 'Foxen', 'Traylen', 27, 'Genderfluid', '5780 Anthes Lane', 'MUSIC');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0006', 'Martin', 'Conkling', 'Kerrane', 37, 'Agender', '52130 Gale Lane', 'ARTS');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0007', 'Elwin', 'Bramstom', 'Heber', 40, 'Male', '115 Orin Plaza', 'ARTS');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0008', 'Phil', 'Swaffer', 'Cornfoot', 36, 'Bigender', '40081 Park Meadow Center', 'SCIENCE FILIPINO');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0009', 'Meryl', 'oldey', 'Volett', 27, 'Polygender', '371 Dwight Junction', 'AP');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0010', 'Vivienne', 'Mapis', 'Ruberti', 31, 'Genderfluid', '99 Pierstorff Drive', 'MUSIC');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0011', 'Bordie', 'Bullivant', 'Axe', 32, 'Male', '9416 Arapahoe Junction', 'TLE');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0012', 'Sean', 'Peakman', 'Smithe', 36, 'Genderqueer', '29 Acker Terrace', 'TLE');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0013', 'Michelina', 'Girdlestone', 'D''Aulby', 39, 'Bigender', '55151 Fairfield Street', 'AP');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0014', 'Adria', 'Drains', 'Bauman', 34, 'Bigender', '77311 Hermina Court', 'MUSIC');
+insert into teachers (teacher_id, first_name, middle_initial, last_name, age, gender, address, subject_teaching) values ('T0015', 'Marlee', 'Kitto', 'Swetland', 29, 'Non-binary', '0527 Westend Drive', 'SCIENCE FILIPINO');
