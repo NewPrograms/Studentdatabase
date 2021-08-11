@@ -6,7 +6,7 @@ engine = create_engine('postgresql+psycopg2://nia:09092004ni@localhost:5432/stud
 base = declarative_base()
 
 class Subject_teaching(base):
-	__tablename__ = 'subject_teaching'
+	__tablename__ 	= 'subject_teaching'
 
 	name = Column(String, primary_key=True, nullable=False)
 	
