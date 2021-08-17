@@ -2,14 +2,16 @@ from sqlalchemy.sql.schema import MetaData
 import create
 import tables
 from sqlalchemy import DDL
-from sqlalchemy import create_engine
+from insert import Insert
 metadata = MetaData()
 class Setup():
 	def __init__(self, engine):
 		self.engine = engine
 		self.conduct = tables.Conduct()
 		self.grades = tables.Grades()
-
+		self.students = tables.Students()
+		self.sections = tables.Section()
+		self.insert = Insert(self.engine)
 	def __setup__(self):
 		# This is for the creating the triggers		
 		tables.base.metadata.create_all(self.engine)
@@ -38,7 +40,7 @@ class Setup():
 			"""
 				CREATE OR REPLACE FUNCTION get_total() RETURNS TRIGGER AS $$
 				BEGIN
-					NEW.TOTAL = NEW.MATH + NEW.SCIENCE + NEW.ENGLISH + NEW.AP + NEW.TLE + NEW.MAPEH + NEW.FLIPINO;
+					NEW.TOTAL = NEW.MATH + NEW.SCIENCE + NEW.ENGLISH + NEW.AP + NEW.TLE + NEW.MAPEH + NEW.FILIPINO;
 					NEW.TOTAL = NEW.TOTAL/7;
 					RETURN NEW;
 					END; 
@@ -55,21 +57,106 @@ class Setup():
 
 
 		# trigger for conduct
-		create.create_func(self.engine, self.conduct.__table__, DDL(
+		create.create_func(self.engine, self.sections.__table__, DDL(
 			"""
-				CREATE OR REPLACE FUNCTION conduct_total() RETURNS TRIGGER AS $$
-				BEGIN
-					NEW.TOTAL = NEW.FAITH + NEW.INTEGRITY + NEW.ENTERPRISE + NEW.SERVICE + NEW.COLLABORATION;
-					NEW.TOTAL = NEW.TOTAL/5;
-					RETURN NEW;
-					END;
-				$$ LANGUAGE 'plpgsql';
-			"""
-	))
-		create.create_trigger(self.engine, self.conduct.__table__, DDL(
-			"""
-				CREATE TRIGGER total_conduct BEFORE INSERT ON CONDUCT
-				FOR EACH ROW EXECUTE PROCEDURE conduct_total();
+			CREATE OR REPLACE FUNCTION random_between(low INT ,high INT) 
+			RETURNS INT AS
+			$$
+			BEGIN
+			RETURN floor(random()* (high-low + 1) + low);
+			END;
+			$$ language 'plpgsql' STRICT;
 			"""
 		))
 
+		create.create_func(self.engine, self.sections.__table__, DDL(
+			"""
+				CREATE OR REPLACE FUNCTION random_words(section_names varchar(50) array) RETURNS VARCHAR AS $$
+				BEGIN
+				RETURN section_names[random_between(1,ARRAY_LENGTH(section_names, 1))];
+				END;
+				$$
+				LANGUAGE 'plpgsql';
+			"""
+		))
+
+		create.create_func(self.engine, self.sections.__table__, DDL(
+			"""
+				CREATE OR REPLACE FUNCTION get_sections() RETURNS TRIGGER AS $$
+				BEGIN
+				IF NEW.GRADE = 10 THEN
+					NEW.section_name = random_words(ARRAY['Aether', 'Uranium', 'Infinity']);
+				ELSIF NEW.GRADE = 9 THEN
+					NEW.section_name = random_words(ARRAY['Tony', 'Loki', 'Ragnarok']);
+				ELSIF NEW.GRADE = 8 THEN
+					NEW.section_name = random_words(ARRAY['Faith', 'Lead', 'Integrity']);
+				ELSE NEW.section_name = random_words(ARRAY['Socrates', 'Plato', 'Aristotle']);
+				END IF;
+				RETURN NEW;
+				END;
+				$$
+				LANGUAGE 'plpgsql';
+			"""
+
+		))
+
+		create.create_trigger(self.engine, self.students.__table__, DDL(
+			"""
+			CREATE TRIGGER add_section BEFORE INSERT ON STUDENTS
+			FOR EACH ROW EXECUTE PROCEDURE get_sections();
+			"""
+		))
+
+		create.create_func(self.engine, self.sections.__table__, DDL(
+			"""
+				CREATE FUNCTION number_students() RETURNS TRIGGER AS $$
+				DECLARE
+				number_of_students record;
+				BEGIN
+				SELECT COUNT(student_id) into number_of_students FROM STUDENTS WHERE section_name = NEW.section_name;
+				NEW.number_of_students :=  CAST(TRANSLATE(CAST(number_of_students AS TEXT), '()', '') AS INTEGER);
+				RETURN NEW;
+				END;
+				$$
+				LANGUAGE 'plpgsql';
+			"""
+		))
+		create.create_func(self.engine, self.sections.__table__, DDL(
+			"""
+				CREATE FUNCTION students_number_students() RETURNS TRIGGER AS $$
+				DECLARE
+				student_number record;
+				BEGIN
+				UPDATE sections SET number_of_students = (SELECT COUNT(student_id) FROM  STUDENTS WHERE section_name = NEW.SECTION_NAME)
+				WHERE section_name = NEW.SECTION_NAME;
+				RETURN NEW;
+				END;
+				$$
+				LANGUAGE 'plpgsql';
+			"""
+		))
+
+		create.create_trigger(self.engine, self.sections.__table__, DDL(
+			"""
+				CREATE TRIGGER get_studentnumbers BEFORE INSERT OR UPDATE ON SECTIONS
+				FOR EACH ROW EXECUTE PROCEDURE number_students();
+			"""
+		))
+		create.create_trigger(self.engine, self.sections.__table__, DDL(
+			"""
+				CREATE TRIGGER get_studentnumbers_students BEFORE INSERT OR UPDATE ON STUDENTS 
+				FOR EACH ROW EXECUTE PROCEDURE students_number_students();
+			"""
+		))
+		table_paths = [
+					'/mnt/c/Users/Ryan Arcillas/Documents/Scripts/Projects/StudentDatabase/sql_data/teaching.sql',
+					'/mnt/c/Users/Ryan Arcillas/Documents/Scripts/Projects/StudentDatabase/sql_data/gender.sql',
+					'/mnt/c/Users/Ryan Arcillas/Documents/Scripts/Projects/StudentDatabase/sql_data/teachers.sql',
+					'/mnt/c/Users/Ryan Arcillas/Documents/Scripts/Projects/StudentDatabase/sql_data/grade_level.sql',
+					'/mnt/c/Users/Ryan Arcillas/Documents/Scripts/Projects/StudentDatabase/sql_data/sections.sql',
+					'/mnt/c/Users/Ryan Arcillas/Documents/Scripts/Projects/StudentDatabase/sql_data/students.sql',
+					'/mnt/c/Users/Ryan Arcillas/Documents/Scripts/Projects/StudentDatabase/sql_data/grades.sql',
+					'/mnt/c/Users/Ryan Arcillas/Documents/Scripts/Projects/StudentDatabase/sql_data/conduct.sql'
+		]
+		for table_path in table_paths:
+			self.insert.read_file(table_path)

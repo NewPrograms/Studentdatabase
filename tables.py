@@ -25,12 +25,12 @@ class Teachers(base):
 
 	teacher_id = Column(String, primary_key = True, nullable = False)
 	first_name = Column(String, nullable = False)
-	middle_initial = Column(String, nullable = False)
+	middle_name = Column(String, nullable = False)
 	last_name = Column(String, nullable = False)
 	age = Column(Integer, nullable = False)
 	subject = Column(String, ForeignKey('subject_teaching.name'))
 	gender_name = Column(String, ForeignKey('gender.name'))
-
+	address = Column(String, nullable=False)
 	# This is the relationships
 	subject_teaching = relationship('Subject_teaching', back_populates= 'teacher')
 	gender = relationship('Gender', back_populates='teacher')
@@ -109,7 +109,6 @@ class Conduct(base):
 	collaboration = Column(String, nullable = False)
 	enterprise = Column(String, nullable = False)
 	service = Column(String, nullable = False)
-	total = Column(String, nullable = False)
 
 	student =  relationship('Students', back_populates= 'conduct')
 

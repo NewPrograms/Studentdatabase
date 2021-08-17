@@ -1,10 +1,4 @@
-insert into grade_level (grade_level) values (9);
-insert into grade_level (grade_level) values (7);
-insert into grade_level (grade_level) values (8);
-insert into grade_level (grade_level) values (9);
-insert into grade_level (grade_level) values (9);
-insert into grade_level (grade_level) values (7);
-insert into grade_level (grade_level) values (8);
-insert into grade_level (grade_level) values (10);
-insert into grade_level (grade_level) values (9);
-insert into grade_level (grade_level) values (10);
+insert into grade_level (grade_level, head) values (7, 'T0013');
+insert into grade_level (grade_level, head) values (8, 'T0014');
+insert into grade_level (grade_level, head) values (9, 'T0015');
+insert into grade_level (grade_level, head) values (10, 'T0001');
