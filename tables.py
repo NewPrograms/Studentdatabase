@@ -104,12 +104,12 @@ class Conduct(base):
 	__tablename__ = 'conduct'
 
 	student_id = Column(String,ForeignKey('students.student_id'),primary_key=True, nullable = False)
-	faith = Column(String, nullable = False)
-	integrity = Column(String, nullable = False)
-	collaboration = Column(String, nullable = False)
-	enterprise = Column(String, nullable = False)
-	service = Column(String, nullable = False)
-
+	faith = Column(Integer, nullable = False)
+	integrity = Column(Integer, nullable = False)
+	collaboration = Column(Integer, nullable = False)
+	enterprise = Column(Integer, nullable = False)
+	service = Column(Integer, nullable = False)
+	total = Column(String, nullable = False)
 	student =  relationship('Students', back_populates= 'conduct')
 
 class Cashier(base):

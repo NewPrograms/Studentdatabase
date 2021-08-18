@@ -148,6 +148,65 @@ class Setup():
 				FOR EACH ROW EXECUTE PROCEDURE students_number_students();
 			"""
 		))
+		
+		create.create_trigger(self.engine, self.conduct.__table__, DDL(
+			"""
+				CREATE OR REPLACE FUNCTION get_conduct_total() RETURNS TRIGGER AS $$
+				BEGIN
+				NEW.TOTAL = NEW.FAITH + NEW.INTEGRITY + NEW.COLLABORATION + NEW.ENTERPRISE + NEW.SERVICE;
+				NEW.TOTAL = NEW.TOTAL::integer /5;
+				RETURN NEW;
+				END;
+				$$ LANGUAGE 'plpgsql';
+			"""
+		))
+
+		create.create_func(self.engine, self.conduct.__table__, DDL(
+
+			"""
+				CREATE TRIGGER get_conduct_total AFTER INSERT OR UPDATE ON CONDUCT
+				FOR EACH ROW EXECUTE PROCEDURE get_conduct_total();
+			"""
+		))
+		create.create_trigger(self.engine, self.conduct.__table__, DDL(
+			"""
+				CREATE OR REPLACE FUNCTION change_total() RETURNS TRIGGER AS $$
+				DECLARE 
+				val record;
+				BEGIN
+				IF NEW.TOTAL::integer >= 97 THEN 
+				NEW.TOTAL = 'A+';
+				ELSIF NEW.TOTAL::integer >= 95 THEN
+				NEW.TOTAL = 'A';
+				ELSIF NEW.TOTAL::integer >= 90 THEN
+				NEW.TOTAL = 'A-';
+				ELSIF NEW.TOTAL::integer >= 85 THEN 
+				NEW.TOTAL = 'B+';
+				ELSIF NEW.TOTAL::integer >= 80 THEN
+				NEW.TOTAL = 'B';
+				ELSIF NEW.TOTAL::integer >= 75 THEN
+				NEW.TOTAL = 'B-';
+				ELSIF NEW.TOTAL::integer >= 70 THEN 
+				NEW.TOTAL = 'C+';
+				ELSIF NEW.TOTAL::integer >= 65 THEN 
+				NEW.TOTAL = 'C';
+				ELSIF NEW.TOTAL::integer >= 60 THEN
+				NEW.TOTAL = 'C-';
+				ELSE NEW.TOTAL = 'F';
+				END IF;
+				RETURN NEW.TOTAL;
+				END;
+				$$ LANGUAGE 'plpgsql';
+		"""
+		))
+		create.create_func(self.engine, self.conduct.__table__, DDL(
+			"""
+				CREATE TRIGGER change_conduct_total BEFORE INSERT OR UPDATE ON CONDUCT
+				 FOR EACH ROW EXECUTE PROCEDURE change_total();
+			"""
+		))
+
+
 		table_paths = [
 					'/mnt/c/Users/Ryan Arcillas/Documents/Scripts/Projects/StudentDatabase/sql_data/teaching.sql',
 					'/mnt/c/Users/Ryan Arcillas/Documents/Scripts/Projects/StudentDatabase/sql_data/gender.sql',
