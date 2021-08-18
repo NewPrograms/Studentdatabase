@@ -164,15 +164,13 @@ class Setup():
 		create.create_func(self.engine, self.conduct.__table__, DDL(
 
 			"""
-				CREATE TRIGGER get_conduct_total AFTER INSERT OR UPDATE ON CONDUCT
+				CREATE TRIGGER get_conduct_total BEFORE INSERT OR UPDATE ON CONDUCT
 				FOR EACH ROW EXECUTE PROCEDURE get_conduct_total();
 			"""
 		))
 		create.create_trigger(self.engine, self.conduct.__table__, DDL(
 			"""
 				CREATE OR REPLACE FUNCTION change_total() RETURNS TRIGGER AS $$
-				DECLARE 
-				val record;
 				BEGIN
 				IF NEW.TOTAL::integer >= 97 THEN 
 				NEW.TOTAL = 'A+';
@@ -194,14 +192,14 @@ class Setup():
 				NEW.TOTAL = 'C-';
 				ELSE NEW.TOTAL = 'F';
 				END IF;
-				RETURN NEW.TOTAL;
+				RETURN NEW;
 				END;
 				$$ LANGUAGE 'plpgsql';
 		"""
 		))
 		create.create_func(self.engine, self.conduct.__table__, DDL(
 			"""
-				CREATE TRIGGER change_conduct_total BEFORE INSERT OR UPDATE ON CONDUCT
+				CREATE TRIGGER change_conduct_total AFTER INSERT OR UPDATE ON CONDUCT
 				 FOR EACH ROW EXECUTE PROCEDURE change_total();
 			"""
 		))
