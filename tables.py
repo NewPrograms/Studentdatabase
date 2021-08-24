@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine, Table, Column, MetaData
-from sqlalchemy.orm import declarative_base, relation,relationship
+from sqlalchemy import create_engine, Column,text
+from sqlalchemy.orm import declarative_base,relationship
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.types import Integer, String
 engine = create_engine('postgresql+psycopg2://nia:09092004ni@localhost:5432/studentdatabase')
@@ -50,7 +50,7 @@ class Section(base):
 	__tablename__ = 'sections'
 
 	section_name = Column(String, primary_key=True)
-	number_of_students = Column(Integer, nullable=False)
+	number_of_students = Column(Integer, nullable=False, default= 0,server_default=text('0') )
 	class_adviser = Column(String, ForeignKey('teachers.teacher_id'), nullable=False)
 	grade = Column(Integer, ForeignKey('grade_level.grade_level'), nullable = False)
 

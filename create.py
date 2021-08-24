@@ -10,9 +10,5 @@ def createdb(engine, database_name):
 	conn.execute("CREATE DATABASE {}".format(database_name))
 	conn.close()
 
-
-def create_func(engine, table, func ):
-	event.listen(table, 'after_create',func.execute(engine))
-
-def create_trigger(engine, table, trigger):
-	event.listen(table, 'after_create', trigger.execute(engine))
+def create_ddl(engine, table, ddl):
+	event.listen(table, 'after_create', ddl.execute(engine))
