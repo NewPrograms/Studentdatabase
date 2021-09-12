@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, Column,text
 from sqlalchemy.orm import declarative_base,relationship
+from sqlalchemy.sql.functions import array_agg
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.types import Integer, String
 engine = create_engine('postgresql+psycopg2://nia:09092004ni@localhost:5432/studentdatabase')
@@ -41,6 +42,7 @@ class GradeLevel(base):
 
 	grade_level = Column(Integer, primary_key=True)
 	head =  Column(String, ForeignKey('teachers.teacher_id'))
+	student_total = Column(Integer, server_default = text('0'))
 
 	teacher =  relationship('Teachers', back_populates= 'grade_level')
 	sections = relationship('Section', back_populates='grade_level')
@@ -83,7 +85,7 @@ class Grades(base):
 	__tablename__ = 'grades'
 #make all grade values integer
 	student_id = Column(String,ForeignKey('students.student_id'), primary_key = True, nullable = False)
-	english = Column(Integer, nullable=False)
+	english = Column(Integer, nullable=False, default=0)
 	math = Column(Integer, nullable=False)
 	filipino = Column(Integer, nullable=False)
 	science = Column(Integer, nullable=False)
@@ -98,7 +100,28 @@ class Grades(base):
 
 	student =  relationship('Students', back_populates= 'grades')
 
-
+	def __repr__(self):
+		# This is for the self values in grades
+		return("""
+			ENGLISH: {}
+			SCIENCE: {}
+			MATH: {}
+			FILIPINO: {}
+			AP: {}
+			TLE: {}
+			MAPEH: {}
+			MUSIC: {}
+			ARTS: {}
+			PE: {}
+			HEALTH: {}
+			TOTAL: {}
+		""".format(
+			self.english, self.science, self.math, self.filipino,
+			self.ap, self.tle, self.mapeh, self.music, self.arts, 
+			self.pe, self.health, self.total
+		)
+		
+		)
 
 class Conduct(base):
 	__tablename__ = 'conduct'
@@ -123,3 +146,7 @@ class Cashier(base):
 	grade_level = relationship('GradeLevel', back_populates='cashier')
 	section = relationship('Section', back_populates = 'cashier')
 	student = relationship('Students', back_populates='cashier')
+
+if __name__ == '__main__':
+	grades = Grades()
+	print(grades.__repr__)

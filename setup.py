@@ -71,6 +71,32 @@ func_statements = {
 				LANGUAGE 'plpgsql';
 			""",
 
+		'CalculateGradeLevelTotal()':
+			"""
+				RETURNS TRIGGER AS $$
+				DECLARE
+				result record;
+				BEGIN
+				FOR result in (SELECT 
+									grade, 
+									SUM(number_of_students) as total
+								FROM
+									SECTIONS
+								GROUP BY grade
+								)
+				LOOP
+				UPDATE 
+					grade_level 
+				SET 
+					student_total = result.total 
+				WHERE grade_level = result.grade;
+				END LOOP;
+				RETURN NEW;
+				END;
+				$$
+				LANGUAGE 'plpgsql';
+			""",
+
 			"""CalculateConductTotal(
 					faith integer, service integer,
 					enterprise integer, collaboration integer,
@@ -171,6 +197,11 @@ triggers_statements = {
 				"""
 					AFTER INSERT ON students 
 					FOR EACH ROW EXECUTE PROCEDURE InsertPaymentStatus();
+				""",
+			"StudentTotal":
+				"""
+					AFTER INSERT OR UPDATE ON SECTIONS
+					FOR EACH ROW EXECUTE PROCEDURE CalculateGradeLevelTotal();
 				"""
 
 }
